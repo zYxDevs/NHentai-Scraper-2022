@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-import requests, json
+import requests, json, os
 
 class main():
     def scrapeManga(url:str, saveToFile:bool=False):
@@ -15,7 +15,19 @@ class main():
 
         headers = {
             'authority': 'nhentai.net',
-            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.102 Safari/537.36 OPR/90.0.4480.117',
+            'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+            'accept-language': 'en-US,en;q=0.9',
+            'cache-control': 'max-age=0', 
+            'referer': 'https://nhentai.net/',
+            'sec-ch-ua': '"Chromium";v="106", "Google Chrome";v="106", "Not;A=Brand";v="99"',
+            'sec-ch-ua-mobile': '?0',
+            'sec-ch-ua-platform': '"Windows"',
+            'sec-fetch-dest': 'document',
+            'sec-fetch-mode': 'navigate',
+            'sec-fetch-site': 'same-origin',
+            'sec-fetch-user': '?1',
+            'upgrade-insecure-requests': '1',
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36',
         }
 
         response = requests.get(url, cookies=cookies, headers=headers)
@@ -32,7 +44,7 @@ class main():
             pages.append("https://nhentai.net/g" + i["href"])
 
         jsonFormat = {
-            "result": {
+            "manga": {
                 "id": id[4],
                 "tags-info": {
                     "count": int(len(tags)),
@@ -55,9 +67,10 @@ class main():
             with open(f"{id[4]}.json", "w") as file:
                 file.write(json.dumps(jsonFormat, indent=4))
 
-            print("\n" + json.dumps(jsonFormat, indent=4) + "\n")
+            print("\n" + "========================================" + "\n" + json.dumps(jsonFormat, indent=4) + "\n" + "========================================" + "\n")
 
 if __name__ == "__main__":
+    os.system("cls")
     while True:
         manga = input("Insert NHentai Link or ID: ")
         saveResult = input("Write to file (Y/N): ")
